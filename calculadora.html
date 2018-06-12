@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Oppen Apps Calculadora</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="titulo">Oppen Apps Calculadora</h1>
+    <div id="app">
+        <calculadora></calculadora>
+    </div>
+  </div>
+  <!-- Primer componente pantalla -->
+  <template id="pantalla">
+    <div class="row">
+      <div class="pantalla">{{ pantalla }}</div>
+    </div>
+  </template>
+  <!---->
+  <!-- Segundo componente calculadora -->
+  <template id="calculadora">
+    <div id="root">
+      <pantalla v-bind:pantalla="pantalla"></pantalla>
+      <div class="row">
+        <div class="box-2 b-orange" @click="limpiar">LIMPIAR</div>
+        <div class="box b-orange" @click="enterOperador(3)">X</div>
+        <div class="box b-orange" @click="del">DEL</div>
+      </div>
+      <div class="row">
+        <div class="box" @click="enterNumero(7)">7</div>
+        <div class="box" @click="enterNumero(8)">8</div>
+        <div class="box" @click="enterNumero(9)">9</div>
+        <div class="box b-orange" @click="enterOperador(2)">-</div>
+      </div>
+      <div class="row">
+        <div class="box" @click="enterNumero(4)">4</div>
+        <div class="box" @click="enterNumero(5)">5</div>
+        <div class="box" @click="enterNumero(6)">6</div>
+        <div class="box b-orange" @click="enterOperador(1)">+</div>
+      </div>
+      <div class="row">
+        <div class="box" @click="enterNumero(1)">1</div>
+        <div class="box" @click="enterNumero(2)">2</div>
+        <div class="box" @click="enterNumero(3)">3</div>
+        <div class="box b-orange" @click="enterOperador(4)">÷</div>
+      </div>
+      <div class="row">
+        <div class="box-2 " @click="enterNumero(0)">0</div>
+        <div class="box  b-orange" @click="addDecimal">.</div>
+        <div class="box b-orange" @click="sum">=</div>
+      </div>
+    </div>
+  </template>
+  <!---->
+</body>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script type="text/javascript">
+Vue.component('pantalla', {
+template: '#pantalla',
+props: ['pantalla']
+});
+
+Vue.component('calculadora', {
+template: '#calculadora',
+data : function(){
+        return {
+          pantalla: '0',
+          numActual: 0,
+          decimal: false,
+          prev: 0,
+          total: 0,
+        }
+    },
+    methods: {
+    limpiar: function() {
+      this.numActual = 0;
+      this.decimal = false;
+      this.total = 0;
+      this.pantalla = '0';
+      this.prev = 0;
+    },
+    addDecimal: function () {
+        if (this.decimal == false) {
+            this.pantalla += '.';
+          this.decimal = true;
+        }
+      },
+      sum: function () {
+        switch (this.prev) {
+          case 1:
+            this.total += this.numActual;
+            break;
+          case 2:
+            this.total -= this.numActual;
+            break;
+          case 3:
+            this.total *= this.numActual;
+            break;
+          case 4:
+            this.total /= this.numActual;
+            break;
+          case 0:
+            break;
+        }
+        this.pantalla = this.total.toString();
+        this.prev = 0;
+        this.numActual = 0;
+      },
+    del: function() {
+      if (this.numActual > 0) {
+        if (this.decimal == false) {
+          this.numActual = parseInt(this.numActual.toString().slice(0, -1), 10);
+        } else {
+          this.numActual = parseFloat(this.numActual.toString().slice(0, -1));
+        }
+
+        if (isNaN(this.numActual))
+          this.numActual = 0;
+        this.pantalla = this.numActual;
+      } else if (this.numActual == 0) {
+        this.pantalla = '';
+      }
+    },
+    enterOperador: function(ops) {
+      if (this.total == 0 && this.numActual == 0) {
+        return;
+      }
+      if (this.total == 0) {
+        this.total += this.numActual;
+      }
+      switch (this.prev) {
+        case 1:
+          this.total += this.numActual;
+          break;
+        case 2:
+          this.total -= this.numActual;
+          break;
+        case 3:
+          this.total *= this.numActual;
+          break;
+        case 4:
+          this.total /= this.numActual;
+          break;
+        case 0:
+          break;
+      }
+
+      if (this.decimal == true) {
+        this.decimal = false;
+      }
+      this.numActual = 0;
+      this.prev = ops;
+    },
+    enterNumero: function (val) {
+        if (this.numActual == 0) {
+          if (this.prev == 0)
+            this.total = 0;
+
+          if (this.decimal == true) {
+            this.numActual = val / 10;
+            this.pantalla += val.toString();
+          } else {
+            this.numActual = val;
+            this.pantalla = val.toString();
+          }
+        } else {
+          if (this.decimal == true) {
+            if (this.numActual.toString().indexOf('.') == -1) {
+              this.numActual = parseFloat(this.numActual.toString() + '.' + val.toString());
+            } else {
+              this.numActual += val.toString();
+              this.numActual = parseFloat(this.numActual);
+            }
+          } else {
+            this.numActual *= 10;
+            this.numActual += val;
+          }
+          this.pantalla += val.toString();
+        }
+      }
+  }
+});
+  var vm = new Vue({
+  el: '#app'
+})
+</script>
+</html>

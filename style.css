@@ -1,0 +1,99 @@
+.box, .box-2{
+  border: 2px solid black;
+  cursor: pointer;
+  float: none;	
+  font-size: 20px;
+  margin-right: -4px;
+  min-width: 6rem;
+  min-height: 5rem;
+  overflow: hidden;
+  text-align: center;
+  transition: all 0.4s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: MONOSPACE;
+  font-weight: 900;
+  color: black;
+  background-color:white;
+}
+.b-orange{
+  background-color: orange;
+}
+
+.titulo{
+  font-family: MONOSPACE;
+  font-weight: 900;
+  color: black;
+}
+
+.box:hover, .box-2:hover {
+  background: #75B1A9;  
+}
+
+.box-blank:hover {
+  background: #ACD0C0 !important;
+}
+
+.pantalla {
+  font-family: MONOSPACE;
+  float: none;
+  text-align: right;
+  margin-right:-4px;
+  min-width: 24rem;
+  height: 80px;
+  font-size: 20px;
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+  color: black;
+}
+
+.row-centered {
+  text-align:center;
+}
+.row {
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body {
+  background: dodgerblue;
+  color: #4F6457;
+  height: 100%;
+  text-align: center;
+  padding-top: 10vh;
+  margin: 0;
+}
+
+.box-2{
+  font-family: MONOSPACE;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 12rem !important;
+  }
+
+@media screen and (min-width:767px){
+  .box-blank{
+    display:none
+  }
+}
+
+@media screen and (max-width:500px){
+.pantalla, .row {
+  min-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.box{
+  min-width: 25% !important;
+}
+.box-2{
+  min-width: 50% !important;
+}
+}
